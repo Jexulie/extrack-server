@@ -26,9 +26,31 @@ var User = mongoose.model('User', userSchema);
 
 module.exports = User;
 
-module.exports.getExpense = (profileID) => {
+/**
+ * Get Expense From the DB
+ * @param {Object} profileID 
+ */
+module.exports.getExpense = profileID => {
     return new Promise ((resolve, reject) => {
         User.find(profileID)
+            .then(u => {
+                resolve(u);
+            })
+            .catch(e => {
+                logger.error(e);
+                reject(e);
+            })
+    });
+}
+
+/**
+ * Add Expense To the DB
+ * @param {Object} expense 
+ * TODO: Fix this
+ */
+module.exports.addExpense = (profileID, newExpense) => {
+    return new Promise ((resolve, reject) => {
+        User.findOneAndUpdate(profileID, newExpense)
             .then(u => {
                 resolve(u);
             })

@@ -9,7 +9,7 @@ var isLogged = (req, res, next) => {
 }
 
 /* Get Expenses */
-router.get('/get', isLogged, (req, res, next) => {
+router.post('/get', isLogged, (req, res, next) => {
     if(req.body.twitter){
         User.getExpense({twitterId: req.body.id})
             .then(u => {
@@ -38,14 +38,38 @@ router.get('/get', isLogged, (req, res, next) => {
 });
 
 /* Add Expense */
-router.get('/add', isLogged, (req, res, next) => {
-
+router.post('/add', isLogged, (req, res, next) => {
+    if(req.body.twitter){
+        User.addExpense({twitterId: req.body.id}, req.body.expense)
+            .then(u => {
+                res.json({action: true, added: true})
+            })
+            .catch(e => {
+                res.json({action: false, added: false, error: e});
+            })
+    }else if(req.body.facebook){
+        User.addExpense({facebookId: req.body.id}, req.body.expense)
+            .then(u => {
+                res.json({action: true, added: true})
+            })
+            .catch(e => {
+                res.json({action: false, added: false, error: e});
+            })
+    }else if(req.body.google){
+        User.addExpense({googleId: req.body.id}, req.body.expense)
+            .then(u => {
+                res.json({action: true, added: true})
+            })
+            .catch(e => {
+                res.json({action: false, added: false, error: e});
+            })
+    }
 });
 
 /* Log Out */
 router.get('/logout', (req, res, next) => {
     req.logOut();
-    res.json({ logout: true });
+    res.json({ action: true, logout: true });
 });
 
 module.exports = router;
