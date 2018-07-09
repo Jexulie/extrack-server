@@ -1,0 +1,8 @@
+# NODE MODULES
+/node_modules
+
+# LOG FOLDER
+/log
+
+# TOKEN FILE
+/config/auth.json
