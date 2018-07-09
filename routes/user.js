@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-
 var passport = require('passport');
+
 /* Check If User Logged */
 var isLogged = (req, res, next) => {
-
+    req.isAuthenticated() ? next() : res.redirect('/authfailed');
 }
 
 /* Get Expenses */

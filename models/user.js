@@ -3,11 +3,12 @@ var Schema = mongoose.Schema;
 var logger = require('../logger');
 
 var userSchema = new Schema({
-    facebookId: String,
-    googleId: String,
-    twitterId: String,
-    fullname: String,
-    avatar: String,
+    createdAt: {type: Date, default: new Date().toLocaleString()},
+    facebookId: {type: String},
+    googleId: {type: String},
+    twitterId: {type: String},
+    fullname: {type: String},
+    avatar: {type: String},
     expenses: []
 });
 
@@ -24,6 +25,8 @@ expenses Schema
 */
 
 var User = mongoose.model('User', userSchema);
+
+// TODO: Prevent multiple account creatation because of multiple logins from Twitch / facebook / google etc
 
 module.exports = User;
 

@@ -6,13 +6,11 @@ var logger = require('../logger');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
 passport.serializeUser((user, done) => {
-    done(null, user._id)
+    done(null, user);
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById({
-        _id: id
-    }).then(user => done(null, user))
+    done(null, id);
 });
 
 module.exports = () => {
@@ -21,15 +19,14 @@ module.exports = () => {
             clientSecret: auth.FacebookSecret,
             callbackURL: "/facebook/redirect"
         },(accessToken, refreshToken, profile, done) => {
-            User.findOrCreate({ twitterId: profile.id })
-            .then(user => {
-                if(user){
-                    done(null, user)
+            User.findOne({ twitterId: profile.id })
+            .then(curUser => {
+                if(curUser){
+                    done(null, curUser)
                 }else{
                     new User({
-                        twitterId: profile.id,
-                        fullname: profile.displayName,
-                        avatar: profile._json.profile_image_url
+                        facebookId: profile.id,
+                        fullname: profile.displayName
                     })
                     .save()
                     .then(newUser => done(null, newUser))

@@ -45,8 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: config.secret,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
+    saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -62,9 +61,10 @@ app.use('/facebook', facebookRouter);
 
 /**
  * For The Rest
+ * TODO: Gives some wierd error on logout
  */
-app.all('*', (req, res) => {
-    res.redirect('/404');
-});
+// app.all('*', (req, res) => {
+//     res.redirect('/404');
+// });
 
 module.exports = app;

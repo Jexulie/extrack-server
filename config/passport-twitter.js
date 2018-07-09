@@ -6,11 +6,12 @@ var logger = require('../logger');
 
 
 passport.serializeUser((user, done) => {
-    done(null, user._id)
+    done(null, user._id);
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById({_id: id}).then(user => done(null,user))
+    User.findById({_id: id}).then(user => done(null, user));
+    done(null, id);
 });
 
 module.exports = passport => {
@@ -19,10 +20,10 @@ module.exports = passport => {
         consumerSecret: auth.TwitterSecret,
         callbackURL: "/twitter/redirect"
     }, (token, tokenSecret, profile, done) => {
-        User.findOrCreate({ twitterId: profile.id })
-            .then(user => {
-                if(user){
-                    done(null, user)
+        User.findOne({ twitterId: profile.id })
+            .then(curUser => {
+                if(curUser){
+                    done(null, curUser)
                 }else{
                     new User({
                         twitterId: profile.id,

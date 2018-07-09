@@ -6,13 +6,12 @@ var logger = require('../logger');
 
 
 passport.serializeUser((user, done) => {
-    done(null, user._id)
+    done(null, user._id);
 });
 
 passport.deserializeUser((id, done) => {
-    User.findById({
-        _id: id
-    }).then(user => done(null, user))
+    // User.findById({_id: id}).then(user => done(null, user));
+    done(null, id);
 });
 
 module.exports = passport => {
@@ -21,11 +20,12 @@ module.exports = passport => {
             clientSecret: auth.GoogleSecret,
             callbackURL: "/google/redirect"
         }, (accessToken, refreshToken, profile, done) => {
-            User.findOrCreate({ googleId: profile.id })
-                .then(user => {
-                    if(user){
-                        done(null, user)
+            User.findOne({ googleId: profile.id })
+                .then(curUser => {
+                    if(curUser){
+                        done(null, curUser)
                     }else{
+                        console.log(typeof profile.id)
                         new User({
                             googleId: profile.id,
                             fullname: profile.displayName,
