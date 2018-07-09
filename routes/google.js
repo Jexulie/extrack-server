@@ -1,15 +1,14 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
-var passport = require('passport');
+require('../config/passport-google')(passport);
 
 /* Auth Login. */
-router.get('/', function(req, res, next) {
-  passport.authenticate('google');
-});
+router.get('/', passport.authenticate('google' , { scope:['profile']}));
 
 /* Auth Callback */
-router.get('/redirect', passport.authenticate('google'), function(req, res, next) {
+router.get('/redirect', passport.authenticate('google',  { failureRedirect: '/authfailed' }), function(req, res, next) {
 
 });
 

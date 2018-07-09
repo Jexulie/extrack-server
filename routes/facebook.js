@@ -1,15 +1,14 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 
-var passport = require('passport');
+require('../config/passport-facebook')(passport);
 
 /* Auth Login. */
-router.get('/', function(req, res, next) {
-  passport.authenticate('facebook');
-});
+router.get('/', passport.authenticate('facebook'));
 
 /* Auth Callback */
-router.get('/redirect', passport.authenticate('facebook'), function(req, res, next) {
+router.get('/redirect',passport.authenticate('facebook', { failureRedirect: '/authfailed' }), function(req, res, next) {
 
 });
 

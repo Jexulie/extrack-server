@@ -7,6 +7,7 @@ var userSchema = new Schema({
     googleId: String,
     twitterId: String,
     fullname: String,
+    avatar: String,
     expenses: []
 });
 

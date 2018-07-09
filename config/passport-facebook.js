@@ -5,21 +5,41 @@ var logger = require('../logger');
 
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+passport.serializeUser((user, done) => {
+    done(null, user._id)
+});
+
+passport.deserializeUser((id, done) => {
+    User.findById({
+        _id: id
+    }).then(user => done(null, user))
+});
+
 module.exports = () => {
-    return new Promise((resolve, reject) => {
-        passport.use(new FacebookStrategy({
+    return passport.use(new FacebookStrategy({
             clientID: auth.FacebookKey,
             clientSecret: auth.FacebookSecret,
-            callbackURL: "http://127.0.0.1:3000/facebook/redirect"
-        },
-        (accessToken, refreshToken, profile) => {
-            User.findOrCreate({ facebookId: profile.id })
-                .then(resolve)
-                .catch(e => {
-                    logger.error(`${new Date().toLocaleString() - e}`);
-                    reject(e);
-                });
+            callbackURL: "/facebook/redirect"
+        },(accessToken, refreshToken, profile, done) => {
+            User.findOrCreate({ twitterId: profile.id })
+            .then(user => {
+                if(user){
+                    done(null, user)
+                }else{
+                    new User({
+                        twitterId: profile.id,
+                        fullname: profile.displayName,
+                        avatar: profile._json.profile_image_url
+                    })
+                    .save()
+                    .then(newUser => done(null, newUser))
+                    .catch(err => done(err, null));
+                }
+            })
+            .catch(e => {
+                logger.error(`${new Date().toLocaleString() - e}`);
+                done(err, null);
+            });
         }
-        ));
-    });
+    ));
 }
