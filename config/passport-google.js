@@ -16,7 +16,7 @@ module.exports = () => {
             User.findOrCreate({ googleId: profile.id })
                 .then(resolve)
                 .catch(e => {
-                    logger.error(e);
+                    logger.error(`${new Date().toLocaleString() - e}`);
                     reject(e);
                 });
         }

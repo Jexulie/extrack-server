@@ -37,7 +37,7 @@ module.exports.getExpense = profileID => {
                 resolve(u);
             })
             .catch(e => {
-                logger.error(e);
+                logger.error(`${new Date().toLocaleString() - e}`);
                 reject(e);
             })
     });
@@ -55,7 +55,7 @@ module.exports.addExpense = (profileID, newExpense) => {
                 resolve(u);
             })
             .catch(e => {
-                logger.error(e);
+                logger.error(`${new Date().toLocaleString() - e}`);
                 reject(e);
             })
     });

@@ -20,17 +20,17 @@ var app = express();
  */
 mongoose.connect(config.database, { useNewUrlParser: true });
 mongoose.connection.on('connected', s =>{
-    logger.info(`Connected to Database,`);
+    logger.info(`${new Date().toLocaleString()} - Connected to Database,`);
 });
 mongoose.connection.on('error', e => {
-    logger.error(e);
+    logger.error(`${new Date().toLocaleString() - e}`);
 });
 mongoose.connection.on('disconnected', d => {
-    logger.info(`Disconnected from Database!`);
+    logger.info(`${new Date().toLocaleString()} - Disconnected from Database!`);
 });
 process.on('SIGINT', () => {
     mongoose.connection.close(() => {
-        logger.info(`Database connection disconnected through app termination.`);
+        logger.info(`${new Date().toLocaleString()} - Database connection disconnected through app termination.`);
         process.exit(0);
     });
 });
@@ -59,5 +59,12 @@ app.use('/user', userRouter);
 app.use('/twitter', twitterRouter);
 app.use('/google', googleRouter);
 app.use('/facebook', facebookRouter);
+
+/**
+ * For The Rest
+ */
+app.all('*', (req, res) => {
+    res.redirect('/404');
+});
 
 module.exports = app;
