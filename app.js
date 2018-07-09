@@ -20,7 +20,7 @@ var app = express();
  */
 mongoose.connect(config.database, { useNewUrlParser: true });
 mongoose.connection.on('connected', s =>{
-    logger.info(`${new Date().toLocaleString()} - Connected to Database,`);
+    logger.info(`${new Date().toLocaleString()} - Connected to Database.`);
 });
 mongoose.connection.on('error', e => {
     logger.error(`${new Date().toLocaleString() - e}`);
