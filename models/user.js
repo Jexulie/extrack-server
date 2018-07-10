@@ -26,13 +26,12 @@ expenses Schema
 
 var User = mongoose.model('User', userSchema);
 
-// TODO: Prevent multiple account creatation because of multiple logins from Twitch / facebook / google etc
-
 module.exports = User;
 
 /**
  * Get Expense From the DB
  * @param {Object} profileID 
+ * Add a param 
  */
 module.exports.getExpense = profileID => {
     return new Promise ((resolve, reject) => {

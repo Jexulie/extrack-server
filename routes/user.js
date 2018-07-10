@@ -66,10 +66,4 @@ router.post('/add', isLogged, (req, res, next) => {
     }
 });
 
-/* Log Out */
-router.get('/logout', (req, res, next) => {
-    req.logOut();
-    res.json({ action: true, logout: true });
-});
-
 module.exports = router;
