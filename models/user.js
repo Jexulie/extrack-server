@@ -33,9 +33,9 @@ module.exports = User;
  * @param {Object} profileID 
  * Add a param 
  */
-module.exports.getExpense = profileID => {
+module.exports.getExpense = something => {
     return new Promise ((resolve, reject) => {
-        User.find(profileID)
+        User.find(something)
             .then(u => {
                 resolve(u);
             })
@@ -49,11 +49,11 @@ module.exports.getExpense = profileID => {
 /**
  * Add Expense To the DB
  * @param {Object} expense 
- * TODO: Fix this
+ * TODO: Fix this - Add push to array
  */
-module.exports.addExpense = (profileID, newExpense) => {
+module.exports.addExpense = (something, newExpense) => {
     return new Promise ((resolve, reject) => {
-        User.findOneAndUpdate(profileID, newExpense)
+        User.findOneAndUpdate(something, newExpense)
             .then(u => {
                 resolve(u);
             })
