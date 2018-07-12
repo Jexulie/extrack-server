@@ -25,12 +25,22 @@ module.exports = User;
  */
 module.exports.fetchUser = userInfo => {
     return new Promise ((resolve, reject) => {
-        User.find({ facebookId: userInfo.id })
+        User.findOne({ facebookId: userInfo.id })
             .then(user => {
-                if(user.length){
+                if(user){
                     resolve(user);
                 }else{
-                    new User(userInfo)
+                    new User({
+                        fullName: userInfo.fullName,
+                        email: userInfo.email,
+                        avatarUrl: userInfo.avatarUrl,
+                        facebookID: userInfo.facebookID,
+                        expenses: [],
+                        filterThisYear: [],
+                        filterThisMonth: [],
+                        filterLastYear: [],
+                        filterLastMonth: []
+                    })
                     .save()
                     .then(savedUser => resolve(savedUser))
                     .catch(e => {
@@ -52,8 +62,7 @@ module.exports.fetchUser = userInfo => {
  */
 module.exports.addExpense = userInfo => {
     return new Promise ((resolve, reject) => {
-        console.log(userInfo)
-        User.findOneAndUpdate({ facebookID: userInfo.facebookID }, userInfo.data)
+        User.findOneAndUpdate({ facebookID: userInfo.expense.facebookID }, userInfo.expense.data)
             .then(u => {
                 resolve(u);
             })
