@@ -3,11 +3,12 @@ var router = express.Router();
 var User = require('../models/user');
 
 
-/* Get Expenses */
-router.post('/get', (req, res, next) => {
-    User.getExpense(req.body)
+/* Fetch User */
+router.post('/fetch', (req, res, next) => {
+    // console.log(req.body)
+    User.fetchUser(req.body)
         .then(u => {
-            res.json({action: true, expenses: u})
+            res.json({action: true, user: u})
         })
         .catch(e => {
             res.json({action: false, error: e});

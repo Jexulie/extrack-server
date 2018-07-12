@@ -4,40 +4,40 @@ var logger = require('../logger');
 
 var userSchema = new Schema({
     createdAt: {type: Date, default: new Date().toLocaleString()},
-    facebookId: {type: String},
-    googleId: {type: String},
-    twitterId: {type: String},
-    fullname: {type: String},
-    avatar: {type: String},
-    expenses: []
+    facebookID: {type: String},
+    fullName: {type: String},
+    email: {type:String},
+    avatarUrl: {type: String},
+    expenses: [],
+    filterThisYear: [],
+    filterThisMonth: [],
+    filterLastYear: [],
+    filterLastMonth: []
 });
-
-/*
-expenses Schema
-{
-    name: String,
-    expense: Number,
-    category: String,
-    date: Date,
-    emailMonthly: Boolean,
-    emailYearly: Boolean
-}
-*/
 
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
 
 /**
- * Get Expense From the DB
- * @param {Object} profileID 
- * Add a param 
+ * Get User From the DB
+ * @param {Object} userInfo
  */
-module.exports.getExpense = something => {
+module.exports.fetchUser = userInfo => {
     return new Promise ((resolve, reject) => {
-        User.find(something)
-            .then(u => {
-                resolve(u);
+        User.find({ facebookId: userInfo.id })
+            .then(user => {
+                if(user.length){
+                    resolve(user);
+                }else{
+                    new User(userInfo)
+                    .save()
+                    .then(savedUser => resolve(savedUser))
+                    .catch(e => {
+                        logger.error(`${new Date().toLocaleString() - e}`);
+                        reject(e);
+                    })
+                }
             })
             .catch(e => {
                 logger.error(`${new Date().toLocaleString() - e}`);
@@ -49,11 +49,11 @@ module.exports.getExpense = something => {
 /**
  * Add Expense To the DB
  * @param {Object} expense 
- * TODO: Fix this - Add push to array
  */
-module.exports.addExpense = (something, newExpense) => {
+module.exports.addExpense = userInfo => {
     return new Promise ((resolve, reject) => {
-        User.findOneAndUpdate(something, newExpense)
+        console.log(userInfo)
+        User.findOneAndUpdate({ facebookID: userInfo.facebookID }, userInfo.data)
             .then(u => {
                 resolve(u);
             })
